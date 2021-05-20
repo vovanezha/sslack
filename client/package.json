@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "start": "rollup -c -w",
-    "build": "parcel build ./index.html"
+    "build": "parcel build ./index.html",
+    "lint:styles": "yarn stylelint \"./**/*.svelte\""
   },
   "dependencies": {
     "svelte": "^3.38.2"
@@ -23,6 +24,10 @@
     "rollup-plugin-progress": "^1.1.2",
     "rollup-plugin-serve": "^1.1.0",
     "rollup-plugin-svelte": "^7.1.0",
-    "rollup-plugin-terser": "^7.0.2"
+    "rollup-plugin-terser": "^7.0.2",
+    "stylelint": "^13.13.1",
+    "stylelint-config-recess-order": "^2.4.0",
+    "stylelint-config-recommended": "^5.0.0",
+    "stylelint-order": "^4.1.0"
   }
 }
