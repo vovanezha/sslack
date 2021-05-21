@@ -23,5 +23,6 @@ module.exports = {
   rules: {
     "unicorn/no-null": "off",
     "unicorn/prefer-module": "off",
+    "unicorn/prevent-abbreviations": "off",
   }
 }
