@@ -8,7 +8,8 @@
     "build": "rollup -c",
     "pretty": "yarn prettier --write --plugin=prettier-plugin-svelte ./**/*.{js,svelte}",
     "lint:js": "yarn eslint \"./**/*.{js,svelte}\"",
-    "lint:styles": "yarn stylelint \"./**/*.svelte\""
+    "lint:styles": "yarn stylelint \"./**/*.svelte\"",
+    "lint:size": "yarn build && yarn size-limit"
   },
   "dependencies": {
     "svelte": "^3.38.2"
@@ -17,6 +18,8 @@
     "@rollup/plugin-commonjs": "^19.0.0",
     "@rollup/plugin-html": "^0.2.3",
     "@rollup/plugin-node-resolve": "^13.0.0",
+    "@size-limit/file": "^4.10.3",
+    "@size-limit/preset-app": "^4.10.3",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.26.0",
     "eslint-config-prettier": "^8.3.0",
@@ -38,9 +41,20 @@
     "rollup-plugin-serve": "^1.1.0",
     "rollup-plugin-svelte": "^7.1.0",
     "rollup-plugin-terser": "^7.0.2",
+    "size-limit": "^4.10.3",
     "stylelint": "^13.13.1",
     "stylelint-config-recess-order": "^2.4.0",
     "stylelint-config-recommended": "^5.0.0",
     "stylelint-order": "^4.1.0"
-  }
+  },
+  "size-limit": [
+    {
+      "path": "public/*.js",
+      "limit": "10 kB"
+    },
+    {
+      "path": "public/*.css",
+      "limit": "2 kB"
+    }
+  ]
 }
