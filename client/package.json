@@ -24,6 +24,8 @@
     "eslint-plugin-import-helpers": "^1.1.0",
     "eslint-plugin-svelte3": "^3.2.0",
     "eslint-plugin-unicorn": "^32.0.1",
+    "husky": ">=6",
+    "lint-staged": ">=10",
     "postcss": "^8.2.15",
     "prettier": "^2.3.0",
     "prettier-plugin-svelte": "^2.3.0",
@@ -40,5 +42,15 @@
     "stylelint-config-recess-order": "^2.4.0",
     "stylelint-config-recommended": "^5.0.0",
     "stylelint-order": "^4.1.0"
+  },
+  "lint-staged": {
+    "*.{js,svelte}": [
+      "yarn prettier --write"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint-staged"
+    }
   }
 }
