@@ -42,15 +42,5 @@
     "stylelint-config-recess-order": "^2.4.0",
     "stylelint-config-recommended": "^5.0.0",
     "stylelint-order": "^4.1.0"
-  },
-  "lint-staged": {
-    "*.{js,svelte}": [
-      "yarn prettier --write"
-    ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "yarn lint-staged"
-    }
   }
 }
