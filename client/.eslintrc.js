@@ -13,7 +13,7 @@ module.exports = {
     sourceType: "module"
   },
   plugins: ["unicorn", "eslint-plugin-import-helpers", "svelte3"],
-  extends: ["plugin:unicorn/recommended"],
+  extends: ["plugin:unicorn/recommended", "prettier"],
   overrides: [
     {
       files: ['*.svelte'],

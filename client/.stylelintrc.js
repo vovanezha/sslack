@@ -1,12 +1,12 @@
-export default {
-  "extends": [
+module.exports = {
+  extends: [
     "stylelint-config-recommended",
     "stylelint-config-recess-order"
   ],
-  "plugins": [
+  plugins: [
     "stylelint-order"
   ],
-  "rules": {
+  rules: {
     "selector-pseudo-class-no-unknown": null,
   }
 }
