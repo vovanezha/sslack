@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "start": "rollup -c -w",
-    "build": "parcel build ./index.html",
+    "build": "rollup -c",
+    "lint:js": "yarn eslint \"./**/*.{js,svelte}\"",
     "lint:styles": "yarn stylelint \"./**/*.svelte\""
   },
   "dependencies": {
@@ -15,6 +16,12 @@
     "@rollup/plugin-commonjs": "^19.0.0",
     "@rollup/plugin-html": "^0.2.3",
     "@rollup/plugin-node-resolve": "^13.0.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.26.0",
+    "eslint-plugin-import": "^2.23.2",
+    "eslint-plugin-import-helpers": "^1.1.0",
+    "eslint-plugin-svelte3": "^3.2.0",
+    "eslint-plugin-unicorn": "^32.0.1",
     "postcss": "^8.2.15",
     "rollup": "^2.48.0",
     "rollup-plugin-cleaner": "^1.0.0",

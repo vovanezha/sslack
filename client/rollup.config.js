@@ -14,7 +14,7 @@ const DEVELOPMENT = !PRODUCTION;
 
 const DIST = 'public'
 
-module.exports = {
+export default {
   input: './src/index.js',
   output: {
     dir: DIST,
