@@ -1,16 +1,22 @@
+<script>
+  import App from '../src/App.svelte';
+</script>
+
 <svelte:head>
-  <title>Login | Sslack</title>
+  <title>Login | SSlack</title>
 </svelte:head>
 
 <form>
   <label>
     Login:
-    <input>
+    <input />
   </label>
   <label>
     Password:
-    <input>
+    <input />
   </label>
 
-  <button type="submit" on:click={console.log}>Log in</button>
+  <button type="button" on:click={() => console.log("I've hydrated, motherfucker!")}>Log in</button>
 </form>
+
+<App />

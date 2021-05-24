@@ -1,4 +1,7 @@
-<h1>Hello from client side!</h1>
+<h1>Hmmmm, can I import a component from `/src` folder...?</h1>
+<button on:click={() => console.log('this is a log from imported component')}>
+  click me and I'll print something into console.
+</button>
 
 <style>
   :global(*) {

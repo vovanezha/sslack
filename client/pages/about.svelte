@@ -1,5 +1,5 @@
 <svelte:head>
-	<title>About | SSlack</title>
+  <title>About | SSlack</title>
 </svelte:head>
 
 <header>

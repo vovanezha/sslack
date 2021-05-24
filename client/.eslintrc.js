@@ -7,23 +7,24 @@ module.exports = {
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
-      legacyDecorators: true
+      legacyDecorators: true,
     },
     ecmaVersion: 2020,
-    sourceType: "module"
+    sourceType: 'module',
   },
-  plugins: ["unicorn", "eslint-plugin-import-helpers", "svelte3"],
-  extends: ["plugin:unicorn/recommended", "prettier"],
+  plugins: ['unicorn', 'eslint-plugin-import-helpers', 'svelte3'],
+  extends: ['plugin:unicorn/recommended', 'prettier'],
   overrides: [
     {
       files: ['*.svelte'],
-      processor: 'svelte3/svelte3'
-    }
+      processor: 'svelte3/svelte3',
+    },
   ],
   rules: {
-    "unicorn/no-null": "off",
-    "unicorn/prefer-module": "off",
-    "unicorn/prevent-abbreviations": "off",
-    "unicorn/prefer-query-selector": "off",
-  }
-}
+    'unicorn/no-null': 'off',
+    'unicorn/prefer-module': 'off',
+    'unicorn/prevent-abbreviations': 'off',
+    'unicorn/prefer-query-selector': 'off',
+    'unicorn/prefer-node-protocol': 'off',
+  },
+};
