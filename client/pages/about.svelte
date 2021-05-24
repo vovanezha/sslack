@@ -1,9 +1,9 @@
 <svelte:head>
-	<title>About | Sslack</title>
+	<title>About | SSlack</title>
 </svelte:head>
 
 <header>
-  <h3>What is Sslack?</h3>
+  <h3>What is SSlack?</h3>
   <p>This is a clone of real Slack application created for educational reasons.</p>
   <p><a href="/login">Log in</a> to access the app</p>
 
