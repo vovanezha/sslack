@@ -26,5 +26,7 @@ module.exports = {
     'unicorn/prevent-abbreviations': 'off',
     'unicorn/prefer-query-selector': 'off',
     'unicorn/prefer-node-protocol': 'off',
+    'unicorn/no-array-for-each': 'off',
+    'unicorn/no-array-callback-reference': 'off',
   },
 };

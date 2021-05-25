@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs';
-
+import rimraf from 'rimraf';
 import svelte from 'rollup-plugin-svelte';
 import postcss from 'rollup-plugin-postcss';
 import html from '@rollup/plugin-html';
@@ -8,7 +8,7 @@ import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import livereload from 'rollup-plugin-livereload';
 import {terser} from 'rollup-plugin-terser';
-import cleaner from 'rollup-plugin-cleaner';
+import copy from 'rollup-plugin-copy';
 import progress from 'rollup-plugin-progress';
 import iifePage from './config-utils/iife-page';
 import htmlTemplate from './config-utils/html-template';
@@ -17,15 +17,18 @@ const PRODUCTION = !process.env.ROLLUP_WATCH;
 const DEVELOPMENT = !PRODUCTION;
 
 const DIST = 'public';
+const ASSETS = './assets';
 
 const pagesPath = path.join('pages');
 const pages = fs.readdirSync(pagesPath).map((filename) => path.join(pagesPath, filename));
 
-export default {
-  input: pages,
+rimraf.sync(DIST);
+
+export default pages.map((page) => ({
+  input: page,
   output: {
     dir: DIST,
-    entryFileNames: `[name].[hash].js`,
+    entryFileNames: DEVELOPMENT ? `[name].js` : '[name].[hash].js',
   },
   plugins: [
     iifePage(),
@@ -33,12 +36,12 @@ export default {
     postcss({extract: true}),
     html({template: htmlTemplate}),
     resolve({browser: true, dedupe: ['svelte']}),
+    copy({targets: [{src: ASSETS, dest: DIST}]}),
     commonjs(),
-    cleaner({targets: [DIST]}),
     progress(),
 
     DEVELOPMENT && livereload(),
 
     PRODUCTION && terser(),
   ],
-};
+}));

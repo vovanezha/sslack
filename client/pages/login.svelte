@@ -1,5 +1,8 @@
 <script>
-  import App from '../src/App.svelte';
+  import Input from '../src/ui-library/input.svelte';
+
+  let login;
+  let password;
 </script>
 
 <svelte:head>
@@ -8,15 +11,11 @@
 
 <form>
   <label>
-    Login:
-    <input />
+    Login:<Input bind:login/>
   </label>
   <label>
-    Password:
-    <input />
+    Password:<Input bind:password/>
   </label>
 
-  <button type="button" on:click={() => console.log("I've hydrated, motherfucker!")}>Log in</button>
+  <button type="button" on:click={() => console.log({login, password})}>Log in</button>
 </form>
-
-<App />

@@ -5,7 +5,7 @@ const GlobalConfig = require('./global-config');
 
 function getFileNameByExtension(filePath, ext) {
   const pageName = filePath.match(/\w+\.svelte/)[0].replace('.svelte', '');
-  const pattern = new RegExp(pageName + '\\.\\w*' + `\\.${ext}`);
+  const pattern = new RegExp(pageName + '(\\.\\w*)?' + `\\.${ext}`);
 
   const scriptFileName = fs
     .readdirSync(GlobalConfig.paths.static)
@@ -19,10 +19,12 @@ module.exports = function viewEngine(filePath, options, next) {
 
   const scriptFileName = getFileNameByExtension(filePath, 'js');
   const stylesFileName = getFileNameByExtension(filePath, 'css');
+  const baseFileName = getFileNameByExtension('_base.svelte', 'css');
 
   const Component = require(filePath).default;
   let {html, head} = Component.render(options);
 
+  head += `<link href="${GlobalConfig.staticFilesPrefix}/${baseFileName}" rel="stylesheet">`;
   if (!head.includes('<title>')) {
     head += `<title>SSlack</title>`;
   }
