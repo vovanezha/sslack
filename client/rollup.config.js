@@ -10,8 +10,8 @@ import livereload from 'rollup-plugin-livereload';
 import {terser} from 'rollup-plugin-terser';
 import copy from 'rollup-plugin-copy';
 import progress from 'rollup-plugin-progress';
-import iifePage from './config-utils/iife-page';
-import htmlTemplate from './config-utils/html-template';
+import iifePage from './rollup-plugins/iife-page';
+import htmlTemplate from './rollup-plugins/html-template';
 
 const PRODUCTION = !process.env.ROLLUP_WATCH;
 const DEVELOPMENT = !PRODUCTION;
