@@ -19,6 +19,8 @@
 
     --base-font-size: 18px;
     --unit: 8px;
+
+    --dark: #444;
   }
 
   :global(*) {

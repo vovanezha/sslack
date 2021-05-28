@@ -1,8 +1,13 @@
 <script>
   import Input from '../src/ui-library/input.svelte';
+  import Button from '../src/ui-library/button.svelte';
 
-  let login;
-  let password;
+  let login = '';
+  let password = '';
+
+  function handleSubmit(event) {
+    console.log(event, {login, password});
+  }
 </script>
 
 <svelte:head>
@@ -15,11 +20,11 @@
       <h1>Log in to SSlack</h1>
     </div>
 
-    <form>
+    <form on:submit|preventDefault={handleSubmit}>
       <Input label={"Login:"} bind:value={login} size="large"/>
       <Input label={"Password:"} bind:value={password} size="large" type="password" />
-    
-      <button on:click|preventDefault={() => console.log({login, password})}>Log in</button>
+
+      <Button variant="default" size="large" block>Log in</Button>
     </form>
   </div>
 </main>
@@ -62,6 +67,9 @@
 
   form > :global(label) {
     margin-bottom: calc(2 * var(--unit));
+  }
+  form > :global(label:last-of-type) {
+    margin-bottom: calc(3 * var(--unit));
   }
 
   @media screen and (max-width: 480px) {

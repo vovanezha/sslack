@@ -38,7 +38,7 @@
     display: inline-flex;
     flex-direction: column;
     font-family: var(--light-font);
-    color: #444;
+    color: var(--dark);
   }
 
   label.small {
