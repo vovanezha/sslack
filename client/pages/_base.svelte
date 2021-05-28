@@ -16,15 +16,20 @@
     --base-font: 'Bureausans', sans-serif;
     --light-font: 'Bureausans Light', sans-serif;
     --bold-font: 'Bureausans Bold', sans-serif;
+
+    --base-font-size: 18px;
+    --unit: 8px;
   }
 
   :global(*) {
     box-sizing: border-box;
-
-    font-family: var(--base-font);
   }
 
   :global(body) {
+    font-family: var(--base-font);
+
     margin: 0;
+    height: 100vh;
+    width: 100%;
   }
 </style>
