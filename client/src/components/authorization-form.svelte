@@ -1,31 +1,20 @@
 <script>
-  import Input from '../src/ui-library/input.svelte';
-  import Button from '../src/ui-library/button.svelte';
-
-  let login = '';
-  let password = '';
-
-  function handleSubmit(event) {
-    console.log(event, {login, password});
-  }
+  export let header = '';
 </script>
 
-<svelte:head>
-  <title>Login | SSlack</title>
-</svelte:head>
-
 <main>
-  <div class="login-container">
+  <div class="container">
     <div class="banner">
-      <h1>Log in to SSlack</h1>
+      <h1>{header}</h1>
     </div>
 
-    <form on:submit|preventDefault={handleSubmit}>
-      <Input label={"Login:"} bind:value={login} size="large"/>
-      <Input label={"Password:"} bind:value={password} size="large" type="password" />
-
-      <Button variant="default" size="large" block>Log in</Button>
+    <form on:submit|preventDefault>
+      <slot name="form" />
     </form>
+
+    {#if $$slots.footer}
+      <p class="footer"><slot name="footer" /></p>
+    {/if}
   </div>
 </main>
 
@@ -37,12 +26,12 @@
     justify-content: center;
   }
 
-  .login-container {
-      margin: 0 20px;
+  .container {
+    margin: 0 20px;
   }
 
   @media screen and (max-width: 480px) {
-    .login-container {
+    .container {
       flex: 1;
     }
   }
@@ -80,5 +69,12 @@
     form > :global(label) {
       width: 350px;
     }
+  }
+
+  .footer {
+    margin-top: var(--unit);
+    margin-bottom: 0;
+    color: var(--dark);
+    text-align: right;
   }
 </style>

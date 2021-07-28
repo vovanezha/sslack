@@ -5,7 +5,7 @@
 </script>
 
 <button on:click class={`${variant} ${size}`} class:block>
-  <slot></slot>
+  <slot />
 </button>
 
 <style>
@@ -14,6 +14,7 @@
     align-items: center;
     justify-content: center;
     padding: 0 calc(var(--unit) * 2);
+    font-family: var(--base-font);
     font-size: var(--base-font-size);
     cursor: pointer;
     border: 1px solid var(--dark);
@@ -22,7 +23,7 @@
 
   button.default {
     background: white;
-    box-shadow: 2px 2px 4px -1px var(--dark);
+    box-shadow: 1px 1px 2px -1px var(--dark);
   }
 
   button.small {

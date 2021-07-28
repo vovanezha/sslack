@@ -7,11 +7,10 @@
 {#if label !== undefined}
   <label class={size}>
     <span>{label}</span>
-    <input {...$$restProps} class={size} bind:value>
+    <input {...$$restProps} class={size} bind:value />
   </label>
-
 {:else}
-  <input {...$$restProps} class={size} bind:value>
+  <input {...$$restProps} class={size} bind:value />
 {/if}
 
 <style>
