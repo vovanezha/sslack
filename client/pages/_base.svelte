@@ -21,17 +21,15 @@
     --unit: 8px;
 
     --dark: #444;
-  }
 
-  :global(*) {
     box-sizing: border-box;
   }
 
   :global(body) {
-    font-family: var(--base-font);
+    width: 100%;
+    height: 100vh;
 
     margin: 0;
-    height: 100vh;
-    width: 100%;
+    font-family: var(--base-font);
   }
 </style>

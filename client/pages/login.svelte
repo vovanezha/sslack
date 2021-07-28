@@ -31,11 +31,10 @@
 
 <style>
   main {
-    display: flex;
-    justify-content: center;
-
     position: relative;
     top: 15%;
+    display: flex;
+    justify-content: center;
   }
 
   .login-container {
@@ -55,10 +54,10 @@
   }
 
   h1 {
-    font-size: calc(2 * var(--base-font-size));
     margin: 0;
+    font-size: calc(2 * var(--base-font-size));
   }
-  
+
   form {
     display: flex;
     flex-direction: column;

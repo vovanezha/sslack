@@ -16,9 +16,9 @@
 
 <style>
   input {
-    border-radius: 4px;
-    border: 1px solid black;
     font-family: var(--light-font);
+    border: 1px solid black;
+    border-radius: 4px;
   }
 
   input.small {
