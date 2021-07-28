@@ -12,25 +12,25 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: false, unique: true })
+  @Column({ unique: true })
   login: string;
 
-  @Column({ nullable: false })
+  @Column()
   password: string;
 
-  @Column({ nullable: false, unique: true })
+  @Column({ unique: true })
   email: string;
 
-  @Column({ nullable: false, length: 255 })
+  @Column({ length: 255 })
   firstName: string;
 
-  @Column({ length: 255 })
+  @Column({ nullable: true, length: 255 })
   lastName: string;
 
-  @Column()
+  @Column({ nullable: true })
   avatar: string;
 
-  @Column({ length: 255 })
+  @Column({ nullable: true, length: 255 })
   bio: string;
 
   @ManyToMany(() => Channel)
