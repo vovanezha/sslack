@@ -3,13 +3,27 @@
   import Input from '../src/ui-library/input.svelte';
   import Button from '../src/ui-library/button.svelte';
   import {buildPageTitle} from '../src/utils/head';
+  import {ffetch} from '../src/fetch';
 
   let login = '';
   let password = '';
   let email = '';
 
-  function handleSubmit(event) {
-    console.log(event, {login, password});
+  let loading = false;
+  let error = null;
+  console.log(loading);
+
+  function handleSubmit() {
+    const form = {login, password, email};
+
+    ffetch('user', {
+      method: 'POST',
+      body: JSON.stringify(form),
+      headers: {
+        'content-type': 'application/json',
+        accept: 'application/json',
+      },
+    });
   }
 </script>
 

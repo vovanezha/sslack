@@ -17,7 +17,13 @@ export class UserController {
 
   @Post()
   create(@Body() createUserDto: CreateUserDto): Promise<User> {
-    return this.userService.create(createUserDto);
+    return this.userService.create({
+      login: createUserDto.login,
+      password: createUserDto.password,
+      email: createUserDto.email,
+      firstName: createUserDto.firstName || 'Good',
+      lastName: createUserDto.lastName || 'Boy',
+    });
   }
 
   @Get(':id')
