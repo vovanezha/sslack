@@ -24,6 +24,10 @@ app.get('/signup', (req, res) => {
   res.render('signup');
 });
 
+app.get('/select-workspace', (req, res) => {
+  res.render('select-workspace');
+});
+
 app.listen(GlobalConfig.PORT, () => {
   console.log(`server has started at http://localhost:${GlobalConfig.PORT}`);
 });

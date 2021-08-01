@@ -37,13 +37,16 @@
   button.small {
     height: calc(var(--unit) * 3);
     font-size: 16px;
+    line-height: calc(var(--unit) * 3);
   }
   button.medium {
     height: calc(var(--unit) * 4);
+    line-height: calc(var(--unit) * 4);
   }
   button.large {
     height: calc(var(--unit) * 5);
     font-size: 20px;
+    line-height: calc(var(--unit) * 5);
   }
 
   button.block {

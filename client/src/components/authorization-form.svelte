@@ -1,75 +1,27 @@
 <script>
-  export let header = '';
+  import Card from '../ui-library/card.svelte';
+
+  export let header = null;
   export let error = null;
 </script>
 
-<main>
-  <div class="container">
-    <div class="banner">
-      <h1>{header}</h1>
-    </div>
+<Card {header}>
+  <form on:submit|preventDefault>
+    <slot name="form" />
 
-    <div class="body">
-      <form on:submit|preventDefault>
-        <slot name="form" />
+    {#if error}
+      <p class="error">
+        ⛔️{error}
+      </p>
+    {/if}
+  </form>
 
-        {#if error}
-          <p class="error">
-            ⛔️{error}
-          </p>
-        {/if}
-      </form>
-
-      {#if $$slots.footer}
-        <p class="footer"><slot name="footer" /></p>
-      {/if}
-    </div>
-  </div>
-</main>
+  {#if $$slots.footer}
+    <p class="footer"><slot name="footer" /></p>
+  {/if}
+</Card>
 
 <style>
-  main {
-    position: relative;
-    top: 15%;
-    display: flex;
-    justify-content: center;
-  }
-
-  .container {
-    margin: 0 20px;
-    border: 1px solid #000;
-  }
-
-  @media screen and (max-width: 480px) {
-    .container {
-      flex: 1;
-    }
-  }
-
-  .banner {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 8px 0;
-    background: #dcdcdc;
-    border-bottom: 1px solid #000;
-  }
-
-  h1 {
-    display: inline;
-    padding: 0 16px;
-    margin: 0;
-    font-size: 24px;
-    background-color: #fff;
-  }
-
-  .body {
-    padding: 16px;
-    margin: 0 4px 4px;
-    border: 1px solid #000;
-    border-top: none;
-  }
-
   form {
     display: flex;
     flex-direction: column;
