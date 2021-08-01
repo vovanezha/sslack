@@ -1,4 +1,5 @@
 require('svelte/register');
+require('./pre-processor');
 
 const fs = require('fs');
 const GlobalConfig = require('./global-config');

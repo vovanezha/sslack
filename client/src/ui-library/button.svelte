@@ -2,10 +2,15 @@
   export let variant = 'default';
   export let size = 'medium';
   export let block = false;
+  export let loading = false;
 </script>
 
-<button on:click class={`${variant} ${size}`} class:block>
-  <slot />
+<button on:click class={`${variant} ${size}`} class:block disabled={loading}>
+  {#if loading}
+    <span>loading...</span>
+  {:else}
+    <slot />
+  {/if}
 </button>
 
 <style>

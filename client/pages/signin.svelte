@@ -18,8 +18,14 @@
 
 <AuthorizationForm header="Sign In to SSlack" on:submit={handleSubmit}>
   <svelte:fragment slot="form">
-    <Input label={'Login:'} bind:value={login} size="large" />
-    <Input label={'Password:'} bind:value={password} size="large" type="password" />
+    <Input label={'Login:'} bind:value={login} size="large" autocomplete="username" />
+    <Input
+      label={'Password:'}
+      bind:value={password}
+      size="large"
+      type="password"
+      autocomplete="current-password"
+    />
 
     <Button variant="default" size="large" block>Sign in</Button>
   </svelte:fragment>

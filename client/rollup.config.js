@@ -12,6 +12,7 @@ import copy from 'rollup-plugin-copy';
 import progress from 'rollup-plugin-progress';
 import iifePage from './rollup-plugins/iife-page';
 import htmlTemplate from './rollup-plugins/html-template';
+import svg from './rollup-plugins/svg-loader';
 
 const PRODUCTION = !process.env.ROLLUP_WATCH;
 const DEVELOPMENT = !PRODUCTION;
@@ -32,6 +33,7 @@ export default pages.map((page) => ({
   },
   plugins: [
     iifePage(),
+    svg(),
     svelte({compilerOptions: {dev: DEVELOPMENT, hydratable: true}}),
     postcss({extract: true}),
     html({template: htmlTemplate}),

@@ -21,6 +21,7 @@
     --unit: 8px;
 
     --dark: #444;
+    --red: #ff4e4e;
 
     box-sizing: border-box;
   }
