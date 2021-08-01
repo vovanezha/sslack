@@ -1,5 +1,5 @@
 function buildPageTitle(title) {
-  return title + ' | SSlack';
+  return title + ' | sslack';
 }
 
 module.exports = {buildPageTitle};

@@ -13,24 +13,24 @@
 </script>
 
 <svelte:head>
-  <title>{buildPageTitle('Sign In')}</title>
+  <title>{buildPageTitle('sign in')}</title>
 </svelte:head>
 
-<AuthorizationForm header="Sign In to SSlack" on:submit={handleSubmit}>
+<AuthorizationForm header="sign in to sslack" on:submit={handleSubmit}>
   <svelte:fragment slot="form">
-    <Input label={'Login:'} bind:value={login} size="large" autocomplete="username" />
+    <Input label={'login:'} bind:value={login} size="large" autocomplete="username" />
     <Input
-      label={'Password:'}
+      label={'password:'}
       bind:value={password}
       size="large"
       type="password"
       autocomplete="current-password"
     />
 
-    <Button variant="default" size="large" block>Sign in</Button>
+    <Button variant="default" size="large" block>sign up</Button>
   </svelte:fragment>
 
   <svelte:fragment slot="footer">
-    Dont have an account yet? <a href="/signup">Sign In</a>
+    dont have an account yet? <a href="/signup">sign up</a>
   </svelte:fragment>
 </AuthorizationForm>

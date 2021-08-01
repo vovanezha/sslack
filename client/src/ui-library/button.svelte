@@ -7,7 +7,10 @@
 
 <button on:click class={`${variant} ${size}`} class:block disabled={loading}>
   {#if loading}
-    <span>loading...</span>
+    <span class="text-container">
+      <span class="spinner">♻️</span>
+      loading...
+    </span>
   {:else}
     <slot />
   {/if}
@@ -49,5 +52,28 @@
 
   button:active {
     transform: translateY(1px);
+  }
+
+  .text-container {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  @keyframes rotate {
+    from {
+      transform: rotate(0deg);
+    }
+
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .spinner {
+    margin-right: 4px;
+    animation-name: rotate;
+    animation-duration: 2s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
   }
 </style>
