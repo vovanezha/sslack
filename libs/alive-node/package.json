@@ -1,0 +1,13 @@
+{
+  "name": "alive-node",
+  "version": "1.0.0",
+  "description": "Tiny library to watch for file system changes and live-reloading",
+  "bin": "./bin/alive-node.js",
+  "main": "./lib/alive-node.js",
+  "exports": "./lib/alive-node.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "vova19tup@gmail.com",
+  "license": "ISC"
+}
