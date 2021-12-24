@@ -27,6 +27,28 @@ const builder = new QueryBuilder();
 
 // SELECT
 (() => {
+    assert.throws(() => builder.in('User').select().where());
+    assert.throws(() => builder.in('User').select().where(null));
+    assert.throws(() => builder.in('User').select().where([null]));
+    assert.throws(() => builder.in('User').select().where(1));
+    assert.throws(() => builder.in('User').select().where('str'));
+    assert.throws(() => builder.in('User').select().where(false));
+
+    assert.throws(() => builder.in('User').select().orderBy());
+    assert.throws(() => builder.in('User').select().orderBy(null));
+    assert.throws(() => builder.in('User').select().orderBy({a: 1}));
+})();
+
+(() => {
+    const {sql, args} = builder.in('User')
+        .select(['name', 'surname', 'age', 'avatar'])
+        .resolve();
+
+    assert.equal(sql, 'SELECT name, surname, age, avatar FROM User');
+    assert.deepEqual(args, [])
+})();
+
+(() => {
     const {sql, args} = builder.in('User')
         .select()
         .where({})
@@ -53,6 +75,25 @@ const builder = new QueryBuilder();
 
     assert.equal(sql, 'SELECT * FROM User WHERE name = $1 AND friends < $2 AND age > $3 AND login <> $4 AND respect <= $5 AND cash >= $6 AND password LIKE $7 AND surname LIKE $8');
     assert.deepEqual(args, ['john', 5, 18, 'user123', 20, '1000$', 'qwer_y', 'bu%ck'])
+})();
+
+(() => {
+    const {sql, args} = builder.in('User')
+        .select()
+        .where({name: 'john'}, {name: 'alex'})
+        .resolve();
+
+    assert.equal(sql, 'SELECT * FROM User WHERE name = $1 OR name = $2');
+    assert.deepEqual(args, ['john', 'alex'])
+})();
+(() => {
+    const {sql, args} = builder.in('User')
+        .select()
+        .where({name: 'john', age: ['>', 20]}, {name: 'alex', age: ['<>', 18]})
+        .resolve();
+
+    assert.equal(sql, 'SELECT * FROM User WHERE name = $1 AND age > $2 OR name = $3 AND age <> $4');
+    assert.deepEqual(args, ['john', 20, 'alex', 18])
 })();
 
 (() => {
@@ -120,6 +161,19 @@ const builder = new QueryBuilder();
 
 // UPDATE
 (() => {
+    assert.throws(() => builder.in('User').update());
+    assert.throws(() => builder.in('User').update(null));
+    assert.throws(() => builder.in('User').update({id: 1}).where());
+
+    assert.throws(() => builder.in('User').update().where());
+    assert.throws(() => builder.in('User').update().where(null));
+    assert.throws(() => builder.in('User').update().where([null]));
+    assert.throws(() => builder.in('User').update().where(1));
+    assert.throws(() => builder.in('User').update().where('str'));
+    assert.throws(() => builder.in('User').update().where(false));
+})();
+
+(() => {
     const {sql, args} = builder.in('User')
         .update({login: 'my_login', email: 'user@mail.com'})
         .resolve();
@@ -138,13 +192,17 @@ const builder = new QueryBuilder();
     assert.deepEqual(args, ['my_login', 'user@mail.com', 1, 16])
 })();
 
-(() => {
-    assert.throws(() => builder.in('User').update());
-    assert.throws(() => builder.in('User').update(null));
-    assert.throws(() => builder.in('User').update({id: 1}).where());
-})();
 
 // DELETE
+(() => {
+    assert.throws(() => builder.in('User').delete().where());
+    assert.throws(() => builder.in('User').delete().where(null));
+    assert.throws(() => builder.in('User').delete().where([null]));
+    assert.throws(() => builder.in('User').delete().where(1));
+    assert.throws(() => builder.in('User').delete().where('str'));
+    assert.throws(() => builder.in('User').delete().where(false));
+})();
+
 (() => {
     const {sql, args} = builder.in('User')
         .delete()

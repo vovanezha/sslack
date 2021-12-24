@@ -9,7 +9,7 @@ class Delete {
         this.clauses.set(CLAUSE.DELETE, builder.table);
     }
 
-    where(conditions) {
+    where(...conditions) {
         validator.where(conditions);
 
         this.clauses.set(CLAUSE.WHERE, conditions);

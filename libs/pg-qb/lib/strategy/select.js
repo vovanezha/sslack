@@ -10,7 +10,7 @@ class Select {
         this.clauses.set(CLAUSE.FROM, builder.table);
     }
 
-    where(conditions) {
+    where(...conditions) {
         validator.where(conditions);
 
         this.clauses.set(CLAUSE.WHERE, conditions);

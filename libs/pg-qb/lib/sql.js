@@ -18,14 +18,23 @@ const SQL_PART_BY_CLAUSE = {
         return `SELECT ${fields.join(', ')}`;
     },
     [CLAUSE.WHERE]: (conditions, offset = 0) => {
-        return Object.entries(conditions)
-            .map(([key, val], i) => {
-                const operator = (Array.isArray(val) ? val[0] : '=').toUpperCase() // in case we got 'like'
-                const index = i + 1 + offset;
+        return conditions
+            .map((cond, condIndex) => {
+                const values = Object.values(cond)
+                const innerOffset = condIndex * values.length
 
-                return `${key} ${operator} $${index}`;
+                return Object.entries(cond)
+                    .map(([key, val], i) => {
+                        const index = i + offset + innerOffset + 1;
+
+                        const operator = (Array.isArray(val) ? val[0] : '=').toUpperCase() // in case we got 'like'
+
+                        return `${key} ${operator} $${index}`;
+                    })
+                    .reduce((acc, sql, index) => (index === 0 ? `${sql}` : acc + ` AND ${sql}`), '')
             })
-            .reduce((acc, sql, index) => (index === 0 ? `WHERE ${sql}` : acc + ` AND ${sql}`), '');
+            .filter(Boolean)
+            .reduce((acc, sql, index) => (index === 0 ? `WHERE ${sql}` : acc + ` OR ${sql}`), '');
     },
     [CLAUSE.ORDER_BY]: (columns) => {
         return columns
@@ -68,8 +77,12 @@ const SQL_PART_BY_CLAUSE = {
 
 const ARGS_BY_CLAUSE = {
     [CLAUSE.WHERE]: (conditions) => {
-        return Object.values(conditions)
-            .map(value => Array.isArray(value) ? value[1] : value);
+        return conditions
+            .map(cond => {
+                return Object.values(cond)
+                    .map(value => Array.isArray(value) ? value[1] : value)
+            })
+            .reduce((acc, values) => acc.concat(values), []);
     },
     [CLAUSE.INSERT]: (fields) => {
         fields = !Array.isArray(fields) ? [fields] : fields;

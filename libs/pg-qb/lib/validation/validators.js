@@ -1,7 +1,9 @@
 const ValidationError = require("./error");
 
 const where = (conditions) => {
-    if (typeof conditions !== 'object' || conditions === null) {
+    const isAllEntriesObject = conditions.every(cond => typeof cond === 'object' && cond !== null && !Array.isArray(cond))
+
+    if (conditions.length === 0 || !isAllEntriesObject) {
         throw new ValidationError('Conditions in WHERE clause should be and object', conditions)
     }
 }

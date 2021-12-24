@@ -12,7 +12,7 @@ class Update {
         this.clauses.set(CLAUSE.SET, fields);
     }
 
-    where(conditions) {
+    where(...conditions) {
         validator.where(conditions);
 
         this.clauses.set(CLAUSE.WHERE, conditions);
