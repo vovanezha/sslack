@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "Tiny SQL query builder library for PostgreSQL",
   "main": "index.js",
-  "scripts": {
-    "test": "node ./test/builder.test.js"
-  },
   "keywords": [
     "query",
     "builder",
