@@ -1,5 +1,5 @@
 const assert = require('assert');
-const QueryBuilder = require('../lib/query-builder');
+const {QueryBuilder} = require('../lib/querybuilder');
 
 const builder = new QueryBuilder();
 

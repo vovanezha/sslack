@@ -1,4 +1,4 @@
-const QueryBuilder = require('./query-builder');
+const QueryBuilder = require('./querybuilder');
 const Database = require('./database');
 
 module.exports = {Database, QueryBuilder};

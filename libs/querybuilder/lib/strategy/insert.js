@@ -12,7 +12,7 @@ class Insert {
         this.clauses.set(CLAUSE.INSERT, fields);
     }
 
-    resolve() {
+    resolve(...args) {
         this.builder.sql = [
             CLAUSE.INTO,
             CLAUSE.INSERT,
@@ -27,7 +27,7 @@ class Insert {
             .map(clause => ARGS_BY_CLAUSE[clause](this.clauses.get(clause)))
             .reduce((acc, args) => acc.concat(args), []);
 
-        return this.builder.resolve();
+        return this.builder.resolve(...args);
     }
 }
 

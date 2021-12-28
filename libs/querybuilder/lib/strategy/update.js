@@ -20,7 +20,7 @@ class Update {
         return this;
     }
 
-    resolve() {
+    resolve(...args) {
         let sql = [
             CLAUSE.UPDATE,
             CLAUSE.SET,
@@ -47,7 +47,7 @@ class Update {
             .map(clause => ARGS_BY_CLAUSE[clause](this.clauses.get(clause)))
             .reduce((acc, args) => acc.concat(args), []);
 
-        return this.builder.resolve();
+        return this.builder.resolve(...args);
     }
 }
 

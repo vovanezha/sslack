@@ -1,8 +1,8 @@
 {
-  "name": "pg-qb",
+  "name": "querybuilder",
   "version": "1.0.0",
   "description": "Tiny SQL query builder library for PostgreSQL",
-  "main": "index.js",
+  "main": "./lib/index.js",
   "keywords": [
     "query",
     "builder",
@@ -10,5 +10,9 @@
     "pg"
   ],
   "author": "vova19tup@gmail.com",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "mock": "link:../mock",
+    "pg": "^8.7.1"
+  }
 }

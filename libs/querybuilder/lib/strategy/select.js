@@ -26,7 +26,7 @@ class Select {
         return this;
     }
 
-    resolve() {
+    resolve(...args) {
         this.builder.sql = [
             CLAUSE.SELECT,
             CLAUSE.FROM,
@@ -43,7 +43,7 @@ class Select {
             .map(clause => ARGS_BY_CLAUSE[clause](this.clauses.get(clause)))
             .reduce((acc, args) => acc.concat(args), []);
 
-        return this.builder.resolve();
+        return this.builder.resolve(...args);
     }
 }
 

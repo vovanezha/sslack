@@ -44,4 +44,4 @@ class QueryBuilder {
     }
 }
 
-module.exports = QueryBuilder;
+module.exports = {QueryBuilder, Cursor};

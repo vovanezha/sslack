@@ -17,7 +17,7 @@ class Delete {
         return this;
     }
 
-    resolve() {
+    resolve(...args) {
         this.builder.sql = [
             CLAUSE.DELETE,
             CLAUSE.WHERE,
@@ -32,7 +32,7 @@ class Delete {
             .map(clause => ARGS_BY_CLAUSE[clause](this.clauses.get(clause)))
             .reduce((acc, args) => acc.concat(args), []);
 
-        return this.builder.resolve();
+        return this.builder.resolve(...args);
     }
 }
 
