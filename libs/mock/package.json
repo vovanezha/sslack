@@ -1,0 +1,17 @@
+{
+  "name": "mock",
+  "version": "1.0.0",
+  "description": "Mocking library that uses link to object instead of the path to the file",
+  "main": "./lib/mock.js",
+  "scripts": {
+    "test": "node ./test/mock.js"
+  },
+  "keywords": [
+    "mock",
+    "spy",
+    "stub",
+    "test"
+  ],
+  "author": "vova19tup@gmail.com",
+  "license": "ISC"
+}
