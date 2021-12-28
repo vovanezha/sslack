@@ -1,0 +1,34 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "Server code of SSlack application",
+  "main": "index.js",
+  "scripts": {
+    "start": "alive-node",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vovanezha/sslack.git"
+  },
+  "keywords": [
+    "slack",
+    "sslack",
+    "chat"
+  ],
+  "author": "vova19tup@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vovanezha/sslack/issues"
+  },
+  "homepage": "https://github.com/vovanezha/sslack#readme",
+  "engines" : {
+    "node" : "16.13.0"
+  },
+  "devDependencies": {
+    "alive-node": "link:../libs/alive-node"
+  },
+  "dependencies": {
+    "querybuilder": "link:../libs/querybuilder"
+  }
+}

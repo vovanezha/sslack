@@ -1,0 +1,11 @@
+lockfileVersion: 5.3
+
+specifiers:
+  alive-node: link:../libs/alive-node
+  querybuilder: link:../libs/querybuilder
+
+dependencies:
+  querybuilder: link:../libs/querybuilder
+
+devDependencies:
+  alive-node: link:../libs/alive-node
