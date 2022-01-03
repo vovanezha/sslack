@@ -22,8 +22,8 @@
     "url": "https://github.com/vovanezha/sslack/issues"
   },
   "homepage": "https://github.com/vovanezha/sslack#readme",
-  "engines" : {
-    "node" : "16.13.0"
+  "engines": {
+    "node": "16.13.0"
   },
   "devDependencies": {
     "alive-node": "link:../libs/alive-node"

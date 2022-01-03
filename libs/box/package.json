@@ -1,0 +1,17 @@
+{
+  "name": "box",
+  "version": "1.0.0",
+  "description": "Runs scripts in Node.js Sandbox",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "nodejs",
+    "vm",
+    "vm",
+    "sandbox"
+  ],
+  "author": "vova19tup@gmail.com",
+  "license": "ISC"
+}
