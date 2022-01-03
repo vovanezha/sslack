@@ -1,0 +1,15 @@
+{
+  "name": "schema",
+  "version": "1.0.0",
+  "description": "Schema definition and validation",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "schema",
+    "validation"
+  ],
+  "author": "vova19tup@gmail.com",
+  "license": "ISC"
+}
