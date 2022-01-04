@@ -47,20 +47,101 @@ const Schema = require('../lib/schema');
 })();
 
 (() => {
-    const entity = {
-        active: 'boolean',
-        lastSeen: {type: 'datetime', nullable: true},
-    };
+    let schema = Schema.from({bool: 'boolean'});
+    let input = true;
+    let errors = schema.validate({bool: input});
+    assert.equal(errors, false)
 
-    const schema = Schema.from(entity);
+    input = false
+    errors = schema.validate({bool: input});
+    assert.equal(errors, false)
 
-    const input = {
-        active: 'no',
-        lastSeen: 'incorrect date'
-    }
+    input = null
+    errors = schema.validate({bool: input});
+    assert.deepEqual(errors, {bool: [{msg: 'Only boolean is allowed', input}]})
 
-    const errors = schema.validate(input);
+    input = 123
+    errors = schema.validate({bool: input});
+    assert.deepEqual(errors, {bool: [{msg: 'Only boolean is allowed', input}]})
 
-    assert.deepEqual(errors.active, [{msg: 'Only boolean is allowed', input: 'no'}])
-    assert.deepEqual(errors.lastSeen, [{msg: 'Only date or null are allowed', input: 'incorrect date'}])
+    schema = Schema.from({bool: {type: 'boolean', nullable: true}});
+    input = true;
+    errors = schema.validate({bool: input});
+    assert.equal(errors, false);
+
+    input = false
+    errors = schema.validate({bool: input});
+    assert.equal(errors, false)
+
+    input = null
+    errors = schema.validate({bool: input});
+    assert.equal(errors, false)
+
+    input = 123
+    errors = schema.validate({bool: input});
+    assert.deepEqual(errors, {bool: [{msg: 'Only boolean or null are allowed', input}]})
+})();
+
+(() => {
+    let schema = Schema.from({date: 'datetime'});
+    let input = new Date().toISOString();
+    let errors = schema.validate({date: input});
+    assert.equal(errors, false)
+
+    input = null
+    errors = schema.validate({date: input});
+    assert.deepEqual(errors, {date: [{msg: 'Only date is allowed', input}]})
+
+    input = 'incorrect date'
+    errors = schema.validate({date: input});
+    assert.deepEqual(errors, {date: [{msg: 'Only date is allowed', input}]})
+
+    schema = Schema.from({date: {type: 'datetime', nullable: true}})
+    input = new Date().toISOString();
+    errors = schema.validate({date: input});
+    assert.equal(errors, false)
+
+    input = null
+    errors = schema.validate({date: input});
+    assert.equal(errors, false)
+
+    input = 'incorrect date'
+    errors = schema.validate({date: input});
+    assert.deepEqual(errors, {date: [{msg: 'Only date or null are allowed', input}]})
+})();
+
+(() => {
+    let schema = Schema.from({int: 'integer'});
+    let input = 1;
+    let errors = schema.validate({int: input});
+    assert.equal(errors, false)
+
+    input = null
+    errors = schema.validate({int: input});
+    assert.deepEqual(errors, {int: [{msg: 'Only integer is allowed', input}]})
+
+    input = '123'
+    errors = schema.validate({int: input});
+    assert.deepEqual(errors, {int: [{msg: 'Only integer is allowed', input}]})
+
+    input = []
+    errors = schema.validate({int: input});
+    assert.deepEqual(errors, {int: [{msg: 'Only integer is allowed', input}]})
+
+    schema = Schema.from({int: {type: 'integer', nullable: true}});
+    input = 1;
+    errors = schema.validate({int: input});
+    assert.equal(errors, false)
+
+    input = null
+    errors = schema.validate({int: input});
+    assert.equal(errors, false)
+
+    input = '123'
+    errors = schema.validate({int: input});
+    assert.deepEqual(errors, {int: [{msg: 'Only integer or null are allowed', input}]})
+
+    input = []
+    errors = schema.validate({int: input});
+    assert.deepEqual(errors, {int: [{msg: 'Only integer or null are allowed', input}]})
 })();

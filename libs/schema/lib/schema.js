@@ -1,3 +1,5 @@
+const {validatorByType} = require('./validator');
+
 const validateEntity = entity => {
     if (typeof entity !== 'object' || entity === null || Array.isArray(entity)) {
         throw new Error(`Entity should be an object, but passed ${entity}`);
@@ -17,45 +19,6 @@ const processorByType = {
         }
 
         return {...value, length: {min: 0, max: 50}}
-    }
-}
-
-const validateByType = {
-    boolean: (input, field) => {
-        if (field.nullable) {
-            return [true, false, null].some(v => v === input)
-                ? null
-                : [{msg: 'Only boolean or null are allowed', input}]
-        }
-
-        return [true, false].some(v => v === input)
-            ? null
-            : [{msg: 'Only boolean is allowed', input}]
-    },
-    datetime: (input, field) => {
-        const checkValid = () => !isNaN(new Date(input).getTime());
-
-        if (field.nullable) {
-            return checkValid() || input === null ? null : [{msg: 'Only date or null are allowed', input}];
-        }
-
-        return checkValid() ? null : [{msg: 'Only date is allowed' }];
-    },
-    integer: (input, field) => {
-        const checkValid = () => typeof input === 'number';
-        const errors = [];
-
-        if (field.nullable && !checkValid() && input !== null) {
-            errors.push({msg: 'Only integer or null are allowed', input});
-        } else if (!checkValid()) {
-            errors.push({msg: 'Only integer is allowed', input})
-        } else if (Reflect.has(field, 'min') && input < field.min) {
-            errors.push({msg: `Only value more than ${field.min} is allowed`, input})
-        } else if (Reflect.has(field, 'max') && input > field.max) {
-            errors.push({msg: `Only value less than ${field.max} is allowed`, input})
-        }
-
-        return errors.length > 0 ? errors : null;
     }
 }
 
@@ -123,10 +86,11 @@ class Schema {
             const field = this.fields[key];
 
             if (!field) {
-                errors[key] = [{msg: 'The field is not allowed', input: null}]
+                errors[key] = [{msg: 'The field is not allowed', input: value}];
+                continue;
             }
 
-            const validate = validateByType[field.type];
+            const validate = validatorByType[field.type];
             const fieldErrors = validate(value, field);
 
             if (fieldErrors) errors[key] = fieldErrors;
