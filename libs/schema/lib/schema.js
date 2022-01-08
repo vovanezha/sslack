@@ -6,6 +6,8 @@ const validateEntity = entity => {
     }
 }
 
+const capitalize = str => `${str[0].toUpperCase()}${str.substring(1)}`;
+
 const combineWithDefault = x => Object.assign({}, {nullable: false, unique: false, primaryKey: false}, x);
 
 const processorByType = {
@@ -23,12 +25,14 @@ const processorByType = {
 }
 
 class Schema {
-    constructor(name, entity) {
+    constructor(name, entity, schemas = []) {
         validateEntity(entity);
 
         this.name = name;
         this.fields = {};
-        this.constraints = new Set();
+        this.references = [];
+
+        this.schemas = schemas;
 
         this.#process(entity);
     }
@@ -44,14 +48,13 @@ class Schema {
     // key: {type: 'text', nullable, primaryKey }
     // key: {type: 'uuid', nullable, primaryKey, unique }
     // key: {type: 'email', nullable, primaryKey, unique }
-    // key: {one: 'Table' }
-    // key: {many: 'Table' }
+    // key: {fk: 'Table' }
     #process(entity) {
         for (const entry of Object.entries(entity)) {
             const [key, value] = entry;
 
-            if (typeof value === 'object' && (Reflect.has(value, 'one') || Reflect.has(value, 'many'))) {
-                this.#processConstraints(entry);
+            if (typeof value === 'object' && (Reflect.has(value, 'foreignKey'))) {
+                this.#processReferences(entry);
             } else {
                 this.#processPlainField(entry);
             }
@@ -68,8 +71,32 @@ class Schema {
         this.fields[key] = value;
     }
 
-    #processConstraints([key, value]) {
-        this.constraints.add({name: key, ...value});
+    #processReferences([key, value]) {
+        const toField = value.toField || 'id'
+        this.references.push({
+            field: key,
+            foreignKey: value.foreignKey,
+            toField: toField,
+            constraintName: value.constraintName || `fk${capitalize(key)}`,
+        });
+
+        this.fields[key] = combineWithDefault({type: this.#findFieldType(toField, value.foreignKey)});
+    }
+
+    #findFieldType(key, table) {
+        for (const schema of this.schemas) {
+            if (schema.filename === table) {
+                const field = schema.exports[key];
+                if (!field) throw new Error(`Schema "${filename}" doesn't have column with name "${key}"`);
+                if (!field.primaryKey) throw new Error(`Column "${key}" in the "${table}" schema is not an primary key`);
+
+                const type = typeof field === 'string' ? field : field.type;
+
+                return type;
+            }
+        }
+
+        return null;
     }
 
     validate(input) {

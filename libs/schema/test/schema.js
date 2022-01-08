@@ -31,19 +31,18 @@ const Schema = require('../lib/schema');
 })();
 
 (() => {
-    const entity = {
+    const schema = new Schema('User', {
         id: 'uuid',
-        group: {one: 'Group'},
-        chats: {many: 'Chat'},
-    };
+        group: {foreignKey: 'Group'},
+        chat: {foreignKey: 'Chat', toField: 'token'},
+        profile: {foreignKey: 'Profile', toField: 'id',  constraintName: 'profile_id'},
+    });
 
-    const schema = new Schema('User', entity);
-    const constraints = Array.from(schema.constraints);
-
-    assert.deepEqual(constraints, [
-        {name: 'group', one: 'Group'},
-        {name: 'chats', many: 'Chat'}
-    ])
+    assert.deepEqual(schema.references, [
+        {field: 'group', foreignKey: 'Group', toField: 'id', constraintName: 'fkGroup'},
+        {field: 'chat', foreignKey: 'Chat', toField: 'token', constraintName: 'fkChat'},
+        {field: 'profile', foreignKey: 'Profile', toField: 'id', constraintName: 'profile_id'},
+    ]);
 })();
 
 (() => {
