@@ -1,5 +1,4 @@
-// creates a table
-// then alters constraints
+const Schema = require("../lib/schema");
 
 // all specified tables
 // all automaically generated many-to-many tables
@@ -53,7 +52,33 @@ class Builder {
             .join('\n');
     }
 
+    #preprocessManyToMany() {
+        const manyToManyTables = this.schemas.reduce((acc, schema) => {
+            const manyToMany = schema.references.filter(ref => ref.through);
+            if (manyToMany.length === 0) return acc;
+
+            manyToMany.forEach(field => {
+                const existing = acc.get(field.through) || {};
+
+                acc.set(field.through, {...existing, [field.as]: {type: field.primaryKeyType, foreignKey: schema.name }, })
+            });
+
+            return acc;
+        }, new Map());
+
+        this.schemas = this.schemas.map(schema => ({...schema, references: schema.references.filter(ref => !ref.through)}));
+
+        const manyToManySchemas = [];
+        for (const [key, value] of manyToManyTables.entries()) {
+            manyToManySchemas.push(new Schema(key, value));
+        }
+
+        this.schemas = this.schemas.concat(manyToManySchemas);
+    }
+
     toSQL() {
+        this.#preprocessManyToMany();
+
         const tables = this.schemas.map(this.createTable).join('\n\n');
         const constraints = this.schemas.map(this.createConstraints).filter(Boolean).join('\n\n');
 

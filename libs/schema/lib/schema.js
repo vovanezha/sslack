@@ -1,4 +1,4 @@
-const {validatorByType} = require('./validator');
+const { validatorByType } = require('./validator');
 
 const validateEntity = entity => {
     if (typeof entity !== 'object' || entity === null || Array.isArray(entity)) {
@@ -8,19 +8,19 @@ const validateEntity = entity => {
 
 const capitalize = str => `${str[0].toUpperCase()}${str.substring(1)}`;
 
-const combineWithDefault = x => Object.assign({}, {nullable: false, unique: false, primaryKey: false}, x);
+const combineWithDefault = x => Object.assign({}, { nullable: false, unique: false, primaryKey: false }, x);
 
 const processorByType = {
     char: (value) => {
-        const {length} = value;
+        const { length } = value;
         if (length !== undefined) {
-            if (Array.isArray(length)) return {...value, length: {min: length[0] || 0, max: length[1] || 50}}
-            if (typeof length === 'number') return {...value, length: {min: 0, max: length}}
-            if (typeof length === 'string') return {...value, length: {min: 0, max: parseInt(length, 10)}}
-            if (typeof length === 'object') return {...value, length: {min: length.min || 0, max: length.max || 50}}
+            if (Array.isArray(length)) return { ...value, length: { min: length[0] || 0, max: length[1] || 50 } }
+            if (typeof length === 'number') return { ...value, length: { min: 0, max: length } }
+            if (typeof length === 'string') return { ...value, length: { min: 0, max: parseInt(length, 10) } }
+            if (typeof length === 'object') return { ...value, length: { min: length.min || 0, max: length.max || 50 } }
         }
 
-        return {...value, length: {min: 0, max: 50}}
+        return { ...value, length: { min: 0, max: 50 } }
     }
 }
 
@@ -32,6 +32,7 @@ class Schema {
         this.fields = {};
         this.references = [];
 
+        this.entity = entity;
         this.schemas = schemas;
 
         this.#process(entity);
@@ -53,7 +54,7 @@ class Schema {
         for (const entry of Object.entries(entity)) {
             const [key, value] = entry;
 
-            if (typeof value === 'object' && (Reflect.has(value, 'foreignKey'))) {
+            if (typeof value === 'object' && (Reflect.has(value, 'foreignKey') || Reflect.has(value, 'through'))) {
                 this.#processReferences(entry);
             } else {
                 this.#processPlainField(entry);
@@ -63,7 +64,7 @@ class Schema {
 
     #processPlainField([key, value]) {
         if (typeof value !== 'object') {
-            value = {type: value};
+            value = { type: value };
         }
         const processor = processorByType[value.type] || (x => x);
         value = combineWithDefault(processor(value));
@@ -72,40 +73,70 @@ class Schema {
     }
 
     #processReferences([key, value]) {
-        const toField = value.toField || 'id'
-        this.references.push({
-            field: key,
-            foreignKey: value.foreignKey,
-            toField: toField,
-            constraintName: value.constraintName || `fk${capitalize(key)}`,
-        });
+        if (value.foreignKey) {
+            const toField = value.toField || 'id'
+            this.references.push({
+                field: key,
+                foreignKey: value.foreignKey,
+                toField: toField,
+                constraintName: value.constraintName || `fk${capitalize(key)}`,
+            });
 
-        this.fields[key] = combineWithDefault({type: this.#findFieldType(toField, value.foreignKey)});
+            const type = value.type || this.#findFKType(toField, value.foreignKey);
+
+            this.fields[key] = combineWithDefault({ type });
+        } else if (value.through) {
+            const type = this.#findPKType();
+            this.#findManyToManyPair(value.through);
+
+            this.references.push({
+                through: value.through,
+                primaryKeyType: type,
+                as: value.as || `${this.name.toLowerCase()}Id`,
+            });
+        }
     }
 
-    #findFieldType(key, table) {
-        for (const schema of this.schemas) {
-            if (schema.filename === table) {
-                const field = schema.exports[key];
-                if (!field) throw new Error(`Schema "${filename}" doesn't have column with name "${key}"`);
-                if (!field.primaryKey) throw new Error(`Column "${key}" in the "${table}" schema is not an primary key`);
+    #findPKType() {
+        const field = Object.values(this.entity).find((value) => typeof value !== 'string' && value.primaryKey);
 
-                const type = typeof field === 'string' ? field : field.type;
+        if (!field) throw new Error(`Schema "${this.name}" doesn't have any primary key to use it in Many-to-Many relationship`);
 
-                return type;
-            }
+        return field.type;
+    }
+
+    #findFKType(key, table) {
+        const schema = this.schemas.find(s => s.filename === table);
+        if (!schema) {
+            console.warn(
+                "\x1b[33m%s\x1b[0m",
+                `Schema "${this.name}" has foreign key "${key}", but doesn't have referenced table "${table}"`
+            ); ``
+            return null; // may be we should throws an exception
         }
 
-        return null;
+        const field = schema.exports[key];
+        if (!field) throw new Error(`Schema "${filename}" doesn't have column with name "${key}"`);
+        if (!field.primaryKey) throw new Error(`Column "${key}" in the "${table}" schema is not an primary key`);
+
+        return typeof field === 'string' ? field : field.type;
+    }
+
+    #findManyToManyPair(table) {
+        const manyToMany = this.schemas.filter(schema => Object.values(schema.exports).find(v => v.through === table));
+
+        if (manyToMany.length < 2) throw new Error(`Schema "${this.name}" doesn't have pair for Many-to-Many relationship through table (${table})`);
+
+        return manyToMany;
     }
 
     validate(input) {
         if (!input) {
-            return {general: {msg: 'Falsy input is not allowed', input}}
+            return { general: { msg: 'Falsy input is not allowed', input } }
         }
 
         if (typeof input !== 'object' || Array.isArray(input)) {
-            return {general: [{msg: 'Only object input is allowed', input}]};
+            return { general: [{ msg: 'Only object input is allowed', input }] };
         }
 
         const errors = {};
@@ -113,7 +144,7 @@ class Schema {
             const field = this.fields[key];
 
             if (!field) {
-                errors[key] = [{msg: 'The field is not allowed', input: value}];
+                errors[key] = [{ msg: 'The field is not allowed', input: value }];
                 continue;
             }
 

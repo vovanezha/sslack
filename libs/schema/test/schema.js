@@ -46,6 +46,54 @@ const Schema = require('../lib/schema');
 })();
 
 (() => {
+    const structs = [
+        {
+            filename: 'Group',
+            exports: {
+                id: 'uuid',
+                user: {through: 'GroupUser'}
+            }
+        },
+        {
+            filename: 'Workspace',
+            exports: {
+                id: 'uuid',
+                user: {through: 'WorkspaceUser'}
+            }
+        },
+    ];
+
+    const schema = new Schema('User', {
+        id: {type: 'uuid', primaryKey: true},
+        groups: {through: 'GroupUser'},
+        workspaces: {through: 'WorkspaceUser', as: 'user_id'},
+    }, structs);
+
+    assert.deepEqual(schema.references, [
+        {through: 'GroupUser', primaryKeyType: 'uuid', as: 'userId'},
+        {through: 'WorkspaceUser', primaryKeyType: 'uuid', as: 'user_id'},
+    ]);
+})();
+
+(() => {
+    assert.throws(() => {
+        new Schema('User', {
+            id: {type: 'uuid', primaryKey: true},
+            groups: {through: 'GroupUser'},
+        });
+    });
+})();
+
+(() => {
+    assert.throws(() => {
+        new Schema('User', {
+            id: 'uuid',
+            groups: {through: 'GroupUser'},
+        });
+    });
+})();
+
+(() => {
     let schema = Schema.from({bool: 'boolean'});
     let input = true;
     let errors = schema.validate({bool: input});
