@@ -160,6 +160,10 @@ class Schema {
     static from(entity) {
         return new Schema('', entity);
     }
+
+    static fromStructs(structs) {
+        return structs.map(s => new Schema(s.filename, s.exports, structs))
+    }
 }
 
 module.exports = Schema;

@@ -11,5 +11,8 @@
     "validation"
   ],
   "author": "vova19tup@gmail.com",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "box": "link:../box"
+  }
 }

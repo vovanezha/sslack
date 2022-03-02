@@ -32,7 +32,7 @@ const execute = async (scriptPath, options = {}) => {
     const script = new vm.Script(src);
     const exports = script.runInContext(context);
 
-    return {filename, exports};
+    return { filename, exports };
 }
 
 module.exports = {

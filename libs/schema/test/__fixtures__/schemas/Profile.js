@@ -1,8 +1,8 @@
 ({
-    id: 'uuid',
+    id: { type: 'uuid', primaryKey: true },
     name: 'char',
     surname: 'char',
     avatar: 'char',
 
-    user: {foreignKey: 'User'},
+    user: { foreignKey: 'User' },
 })

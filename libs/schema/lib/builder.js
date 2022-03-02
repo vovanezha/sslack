@@ -1,4 +1,4 @@
-const Schema = require("../lib/schema");
+const Schema = require("./schema");
 
 // all specified tables
 // all automaically generated many-to-many tables
@@ -60,13 +60,13 @@ class Builder {
             manyToMany.forEach(field => {
                 const existing = acc.get(field.through) || {};
 
-                acc.set(field.through, {...existing, [field.as]: {type: field.primaryKeyType, foreignKey: schema.name }, })
+                acc.set(field.through, { ...existing, [field.as]: { type: field.primaryKeyType, foreignKey: schema.name }, })
             });
 
             return acc;
         }, new Map());
 
-        this.schemas = this.schemas.map(schema => ({...schema, references: schema.references.filter(ref => !ref.through)}));
+        this.schemas = this.schemas.map(schema => ({ ...schema, references: schema.references.filter(ref => !ref.through) }));
 
         const manyToManySchemas = [];
         for (const [key, value] of manyToManyTables.entries()) {
@@ -82,7 +82,7 @@ class Builder {
         const tables = this.schemas.map(this.createTable).join('\n\n');
         const constraints = this.schemas.map(this.createConstraints).filter(Boolean).join('\n\n');
 
-        return [tables, constraints].join('\n\n')
+        return [tables, constraints].join('\n\n') + '\n';
     }
 }
 

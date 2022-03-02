@@ -1,5 +1,5 @@
 const assert = require('assert');
-const Builder = require('../cli/builder');
+const Builder = require('../lib/builder');
 const Schema = require('../lib/schema');
 
 const getSql = p => require(`./__fixtures__/${p}`);

@@ -1,7 +1,7 @@
 ({
-    id: 'uuid',
+    id: { type: 'uuid', primaryKey: true },
     name: 'char',
-    description: {type: 'char', nullable: true},
+    description: { type: 'char', nullable: true },
 
-    profile: {foreignKey: 'Profile'},
+    profile: { foreignKey: 'Profile' },
 })

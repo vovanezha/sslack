@@ -2,7 +2,7 @@
   "name": "box",
   "version": "1.0.0",
   "description": "Runs scripts in Node.js Sandbox",
-  "main": "index.js",
+  "main": "./lib/box.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

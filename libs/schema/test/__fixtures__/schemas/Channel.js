@@ -1,8 +1,8 @@
 ({
     id: 'uuid',
     name: 'char',
-    description: {type: 'char', nullable: true},
+    description: { type: 'char', nullable: true },
 
-    workspace: {foreignKey: 'Workspace'},
-    profile: {foreignKey: 'Profile'},
+    workspace: { foreignKey: 'Workspace' },
+    profile: { foreignKey: 'Profile' },
 })
