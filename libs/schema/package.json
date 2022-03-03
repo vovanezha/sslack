@@ -13,6 +13,7 @@
   "author": "vova19tup@gmail.com",
   "license": "ISC",
   "dependencies": {
-    "box": "link:../box"
+    "box": "link:../box",
+    "pg": "^8.7.3"
   }
 }

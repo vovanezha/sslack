@@ -111,7 +111,7 @@ class Schema {
             console.warn(
                 "\x1b[33m%s\x1b[0m",
                 `Schema "${this.name}" has foreign key "${key}", but doesn't have referenced table "${table}"`
-            ); ``
+            );
             return null; // may be we should throws an exception
         }
 
