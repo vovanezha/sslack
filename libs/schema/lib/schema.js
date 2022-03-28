@@ -116,7 +116,7 @@ class Schema {
         }
 
         const field = schema.exports[key];
-        if (!field) throw new Error(`Schema "${filename}" doesn't have column with name "${key}"`);
+        if (!field) throw new Error(`Schema "${schema.filename}" doesn't have column with name "${key}"`);
         if (!field.primaryKey) throw new Error(`Column "${key}" in the "${table}" schema is not an primary key`);
 
         return typeof field === 'string' ? field : field.type;

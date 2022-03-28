@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const pg = require('pg');
+const { cpHistory, getOrCreateHistory } = require('../lib/utils');
 
 const BOLD = '\033[1m%s\033[0m';
 const RED = '\x1b[31m%s\x1b[0m';
@@ -87,7 +88,7 @@ async function runMigrations(client, root, migrations) {
     }
 }
 
-module.exports = async function migrate(migrationsPath, options) {
+module.exports = async function migrate(migrationsPath, schemasPath, options) {
     const pool = new pg.Pool({
         database: options.database,
         user: options.user,
@@ -115,6 +116,9 @@ module.exports = async function migrate(migrationsPath, options) {
         }
 
         await runMigrations(client, migrationsPath, notAppliedMigratoins);
+
+        const [_, historyPath] = await getOrCreateHistory(schemasPath);
+        await cpHistory(schemasPath, historyPath)
 
         console.log(BOLD, '🏗  Database migrated successfully!');
     } catch (error) {

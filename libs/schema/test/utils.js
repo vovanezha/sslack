@@ -1,34 +1,42 @@
 const assert = require('assert');
-const { findNonEqualParts } = require('../lib/utils');
-
+const { isEqual } = require('../lib/utils');
 
 (() => {
-    const object1 = { a: 1, b: 2, c: 3 };
-    const object2 = { a: 1, b: 2, c: 3 };
+    assert.equal(isEqual(1, 1), true);
+    assert.equal(isEqual('1', '1'), true);
+    assert.equal(isEqual(true, true), true);
+    assert.equal(isEqual(false, false), true);
+    assert.equal(isEqual({}, {}), true);
 
-    assert.deepEqual(findNonEqualParts(object1, object2), []);
+    assert.equal(isEqual(1), false);
+    assert.equal(isEqual(1, undefined), false);
+    assert.equal(isEqual(1, null), false);
+    assert.equal(isEqual(1, 2), false);
+    assert.equal(isEqual('1', '2'), false);
+    assert.equal(isEqual(true, false), false);
+    assert.equal(isEqual(false, true), false);
+    assert.equal(isEqual({}, { a: 1 }), false);
 })();
 
 (() => {
-    const object1 = { a: 1, b: 2, c: 3 };
-    const object2 = { a: 1, b: 3, c: 3 };
-
-    assert.deepEqual(findNonEqualParts(object1, object2), [{ key: 'b', left: 2, right: 3 }]);
+    assert.equal(isEqual({ a: 1 }, { a: 1 }), true)
+    assert.equal(isEqual({ a: '1' }, { a: '1' }), true)
+    assert.equal(isEqual({ a: true }, { a: true }), true)
+    assert.equal(isEqual({ a: { b: 1 } }, { a: { b: 1 } }), true)
+    assert.equal(isEqual({ a: { b: '1' } }, { a: { b: '1' } }), true)
+    assert.equal(isEqual({ a: { b: true } }, { a: { b: true } }), true)
+    assert.equal(isEqual({ a: { b: { c: 1 } } }, { a: { b: { c: 1 } } }), true)
 })();
 
 (() => {
-    const object1 = { a: 1, b: 2, c: 3 };
-    const object2 = { a: 1, b: 3, c: false };
-
-    assert.deepEqual(findNonEqualParts(object1, object2), [
-        { key: 'b', left: 2, right: 3 },
-        { key: 'c', left: 3, right: false }
-    ]);
+    assert.equal(isEqual({ a: 1, b: 2 }, { a: 1, b: 2 }), true)
+    assert.equal(isEqual({ b: 1, a: 2 }, { a: 2, b: 1 }), true)
+    assert.equal(isEqual({ a: 1, b: { c: false } }, { a: 1, b: { c: false } }), true)
 })();
 
 (() => {
-    const object1 = { a: 1, b: 2, c: 3 };
-    const object2 = { a: 1, b: 2 };
-
-    assert.deepEqual(findNonEqualParts(object1, object2), [{ key: 'c', left: 3, right: undefined }]);
+    assert.equal(isEqual({ a: 1, b: 2 }, { a: 2, b: 1 }), false)
+    assert.equal(isEqual({ a: 1, b: '2' }, { a: 1, b: 2 }), false)
+    assert.equal(isEqual({ a: 1, b: false }, { a: 1, b: 2 }), false)
+    assert.equal(isEqual({ a: 1, b: {} }, { a: 1, b: 2 }), false)
 })();

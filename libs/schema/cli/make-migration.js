@@ -4,22 +4,7 @@ const box = require('box');
 const Builder = require('../lib/builder');
 const Schema = require('../lib/schema');
 const diffSchemas = require('../lib/diff');
-
-async function createHistoryDirIfNeed(schemasPath) {
-    const historyPath = path.join(schemasPath, './history');
-    const exists = await fs.existsSync(historyPath);
-
-    if (!exists) {
-        const files = await fs.promises.readdir(schemasPath, { withFileTypes: true });
-        await fs.promises.mkdir(historyPath);
-        await Promise.all(files.map(dirent => fs.promises.copyFile(
-            path.join(schemasPath, dirent.name),
-            path.join(historyPath, dirent.name)
-        )));
-    }
-
-    return [exists, historyPath];
-}
+const { getOrCreateHistory, cpHistory } = require('../lib/utils');
 
 async function buildSchemas(schemasPath) {
     const dir = await fs.promises.readdir(schemasPath, { withFileTypes: true });
@@ -56,7 +41,7 @@ async function createMigrationFilepath(migrationsPath, migrationName) {
 }
 
 module.exports = async function makeMigration(schemasPath, migrationsPath, migrationName) {
-    const [existsHistory, historyPath] = await createHistoryDirIfNeed(schemasPath);
+    const [existsHistory, historyPath] = await getOrCreateHistory(schemasPath);
 
     let sql = null;
     if (!existsHistory) {
@@ -66,10 +51,7 @@ module.exports = async function makeMigration(schemasPath, migrationsPath, migra
         const oldSchemas = await buildSchemas(historyPath);
         const newSchemas = await buildSchemas(schemasPath);
 
-        // explore all diffs and do a sql from them
-        diffSchemas(newSchemas, oldSchemas);
-
-        sql = new Builder(newSchemas).toSQL();
+        sql = diffSchemas(newSchemas, oldSchemas);
     }
 
     const filepath = await createMigrationFilepath(migrationsPath, migrationName);

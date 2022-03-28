@@ -1,33 +1,52 @@
+const path = require('path');
+const fs = require('fs');
+
 const isObject = o => typeof o === 'object' && o !== null;
 
-function swapIfNeed(arr1, arr2) {
-    if (arr2.length > arr1.length) {
-        return [arr2, arr1];
+function isEqual(newObject, oldObject) {
+    if (isObject(newObject) && isObject(oldObject)) {
+        const newKeys = Object.keys(newObject);
+        const oldKeys = Object.keys(oldObject);
+        if (newKeys.length !== oldKeys.length) {
+            return false;
+        }
+
+        return newKeys.every(key => {
+            return isEqual(newObject[key], oldObject[key]);
+        });
     }
 
-    return [arr1, arr2];
+    return newObject === oldObject;
 }
 
-function findNonEqualParts(object1, object2) {
-    let keys1 = Object.keys(object1);
-    let keys2 = Object.keys(object2);
+async function cpHistory(schemasPath, historyPath) {
+    await fs.promises.rm(historyPath, { force: true, recursive: true });
+    await fs.promises.mkdir(historyPath);
 
-    [keys1, keys2] = swapIfNeed(keys1, keys2);
+    const files = (await fs.promises.readdir(schemasPath, { withFileTypes: true }))
+        .filter(dirent => dirent.isFile());
 
-    const result = [];
-    for (const key of keys1) {
-        const value1 = object1[key];
-        const value2 = object2[key];
+    await Promise.all(
+        files.map(dirent => fs.promises.copyFile(
+            path.join(schemasPath, dirent.name),
+            path.join(historyPath, dirent.name)
+        )));
 
-        if (isObject(value1) && isObject(value2)) {
-            const parts = findNonEqualParts(value1, value2);
-            result.push();
-        } else if (value1 !== value2) {
-            result.push({ key, left: value1, right: value2 })
-        };
+    await Promise.all(
+        files.map(dirent => fs.promises.chmod(path.join(historyPath, dirent.name), '0444'))
+    )
+}
+
+async function getOrCreateHistory(schemasPath) {
+    const historyPath = path.join(schemasPath, './history');
+    const exists = await fs.existsSync(historyPath);
+
+    if (!exists) {
+        await fs.promises.mkdir(historyPath);
     }
 
-    return result;
+    return [exists, historyPath];
 }
 
-module.exports = { swapIfNeed, findNonEqualParts }
+
+module.exports = { cpHistory, getOrCreateHistory, isEqual }
