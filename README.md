@@ -1,0 +1,1 @@
+I am building a Slack from scratch, kinda "build your own X". The hard thing is that I do this without any production tool (for this moment): no frameworks, no ORMs, no helper libs. Everything is written by me for me

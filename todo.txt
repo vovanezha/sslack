@@ -1,15 +1,8 @@
-- create a lib to build sql from schema files
-  - it is a CLI tool
-  - can build the whole database sql file based on all schema files
-  - builds a history folder with a snapshots of previous database version
-  - builds a migration (up and down) files by extracting diffs from two database.sql files | or by extracting diffs from schema file
+- add authorization to the server:
+  - endpoints
+  - database models
+  - session system (probably)
 
-- think and maybe explore how to use Schemas in the app:
-  - is it just a representation of database table?
-  - is it ok to use it for api params validation?
-  - any other usage?
+- start a base client - authorization form
 
-- explore what is Model:
-  - maybe its a representation of an Entity inside the app?
-  - how it correlates with Schema?
-  - any usage?
+- configure monorepo right. Maybe replace pnpm with yarn (pnpm doesnt work in Belarus anymore)
