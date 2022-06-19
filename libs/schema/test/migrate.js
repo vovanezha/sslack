@@ -21,7 +21,7 @@ const options = {
 })();
 
 (async () => {
-    await migrate(migrationPath, schemasPath, options);
+    await migrate(schemasPath, migrationPath, options);
 })().finally(() => {
     child_process.spawnSync('dropdb', [dbname]);
     child_process.spawnSync('dropuser', [username]);

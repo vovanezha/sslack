@@ -1,11 +1,13 @@
-lockfileVersion: 5.3
+lockfileVersion: 5.4
 
 specifiers:
   box: link:../box
+  dotenv: link:../dotenv
   pg: ^8.7.3
 
 dependencies:
   box: link:../box
+  dotenv: link:../dotenv
   pg: 8.7.3
 
 packages:

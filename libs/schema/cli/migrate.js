@@ -88,7 +88,7 @@ async function runMigrations(client, root, migrations) {
     }
 }
 
-module.exports = async function migrate(migrationsPath, schemasPath, options) {
+module.exports = async function migrate(schemasPath, migrationsPath, options) {
     const pool = new pg.Pool({
         database: options.database,
         user: options.user,
