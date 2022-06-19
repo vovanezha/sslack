@@ -7,80 +7,110 @@ const absPath = (p) => path.join(process.cwd(), p);
 
 const schemasPath = path.join(process.cwd(), './test/__fixtures__/schemas');
 
-const migrationsPath1 = absPath('./test/__fixtures__/migrate/migrations');
-const migrationsPath2 = absPath('./test/__fixtures__/folder2/migrations');
-const migrationsPath3 = absPath('./test/__fixtures__/folder3/migrations');
-const migrationsPath4 = absPath('./test/__fixtures__/folder4/migrations');
+function assertFoldersEqual(folder1, folder2) {
+    const files1 = fs.readdirSync(folder1);
+    const files2 = fs.readdirSync(folder2);
+
+    assert.equal(files1.length, files2.length);
+
+    files1.forEach((file1, index) => assert.equal(file1, files2[index]));
+
+    files1.forEach((file1, index) => {
+        const filepath1 = path.join(folder1, file1);
+        const filepath2 = path.join(folder2, files2[index]);
+
+
+        const stat1 = fs.statSync(filepath1);
+        const stat2 = fs.statSync(filepath2);
+
+        if (!stat1.isDirectory() && !stat2.isDirectory()) {
+            const content1 = fs.readFileSync(filepath1, 'utf-8');
+            const content2 = fs.readFileSync(filepath2, 'utf-8');
+
+            return assert.equal(content1, content2);
+        }
+
+        if (stat1.isDirectory() && stat2.isDirectory()) {
+            return assertFoldersEqual(filepath1)
+        }
+
+        throw new Error('Assertion failed, one entry is directory and the other is not')
+    })
+}
+
+const migrationsDir1 = absPath('./test/__fixtures__/make-migration/01/actual/migrations');
+const migrationsDir2 = absPath('./test/__fixtures__/make-migration/02/actual/migrations');
+const migrationsDir3 = absPath('./test/__fixtures__/make-migration/03/actual/migrations');
+const migrationsDir4 = absPath('./test/__fixtures__/make-migration/04/actual/migrations');
+
+// prepare fixtures
+(() => {
+    if (!fs.existsSync(migrationsDir1)) {
+        fs.mkdirSync(migrationsDir1, {recursive: true})
+    }
+
+    if (!fs.existsSync(migrationsDir2)) {
+        fs.mkdirSync(migrationsDir2, {recursive: true})
+    }
+
+    if (!fs.existsSync(migrationsDir4)) {
+        fs.mkdirSync(migrationsDir4, {recursive: true})
+    }
+})();
 
 // without migrations directory
 (async () => {
-    const expectedMigration = await fs.promises.readFile(absPath('./test/__fixtures__/folder1/migration.sql'), 'utf-8');
+    const expectedDir = absPath('./test/__fixtures__/make-migration/01/expected/migrations')
 
-    await makeMigration(schemasPath, migrationsPath1).catch(err => console.error(err));
+    await makeMigration(schemasPath, migrationsDir1).catch(err => console.log(err));
 
-    // assert.equal(fs.existsSync(migrationsPath1), true);
-    // assert.equal(fs.existsSync(migrationsPath1 + '/0001_migration.sql'), true);
-    // assert.equal(fs.existsSync(migrationsPath1 + '/0002_migration.sql'), false);
-
-    // const migration = await fs.promises.readFile(migrationsPath1 + '/0001_migration.sql', 'utf-8');
-
-    // assert.equal(migration, expectedMigration);
+    assertFoldersEqual(expectedDir, migrationsDir1)
 })().finally(async () => {
     // cleanup
-    // await fs.promises.rm(migrationsPath1, { recursive: true, force: true });
+    await fs.promises.rm(migrationsDir1, { recursive: true, force: true });
 
-    // assert.equal(fs.existsSync(migrationsPath1), false);
+    assert.equal(fs.existsSync(migrationsDir1), false);
 });
 
-// // with migrations directory but without any migration file
-// (async () => {
-//     const expectedMigration = await fs.promises.readFile(absPath('./test/__fixtures__/folder2/migration.sql'), 'utf-8');
+// with migrations directory but without any migration file
+(async () => {
+    const expectedDir = absPath('./test/__fixtures__/make-migration/02/expected/migrations');
 
-//     await makeMigration(schemasPath, migrationsPath2).catch(err => console.error(err));
+    await makeMigration(schemasPath, migrationsDir2).catch(err => console.error(err));
 
-//     assert.equal(fs.existsSync(migrationsPath2), true);
-//     assert.equal(fs.existsSync(migrationsPath2 + '/0001_migration.sql'), true);
-//     assert.equal(fs.existsSync(migrationsPath2 + '/0002_migration.sql'), false);
+    assertFoldersEqual(expectedDir, migrationsDir2)
+})().finally(async () => {
+    // cleanup
+    await fs.promises.rm(migrationsDir2 + '/0001_migration.sql');
 
-//     const migration = await fs.promises.readFile(migrationsPath2 + '/0001_migration.sql', 'utf-8');
+    assert.equal(fs.existsSync(migrationsDir2 + '/0001_migration.sql'), false);
+});
 
-//     assert.equal(migration, expectedMigration);
-// })().finally(async () => {
-//     // cleanup
-//     await fs.promises.rm(migrationsPath2 + '/0001_migration.sql');
+// with migrations directory and with one migration file
+(async () => {
+    const expectedDir = absPath('./test/__fixtures__/make-migration/03/expected/migrations');
 
-//     assert.equal(fs.existsSync(migrationsPath2 + '/0001_migration.sql'), false);
-// });
+    await makeMigration(schemasPath, migrationsDir3).catch(err => console.error(err));
 
-// // with migrations directory and with one migration file
-// (async () => {
-//     const expectedMigration = await fs.promises.readFile(absPath('./test/__fixtures__/folder3/migration.sql'), 'utf-8');
+    assertFoldersEqual(expectedDir, migrationsDir3)
+})().finally(async () => {
+    // cleanup
+    await fs.promises.rm(migrationsDir3 + '/0002_migration.sql');
 
-//     await makeMigration(schemasPath, migrationsPath3).catch(err => console.error(err));
+    assert.equal(fs.existsSync(migrationsDir3 + '/0001_migration.sql'), true);
+    assert.equal(fs.existsSync(migrationsDir3 + '/0002_migration.sql'), false);
+});
 
-//     assert.equal(fs.existsSync(migrationsPath3), true);
-//     assert.equal(fs.existsSync(migrationsPath3 + '/0001_migration.sql'), true);
-//     assert.equal(fs.existsSync(migrationsPath3 + '/0002_migration.sql'), true);
+// custom migration name
+(async () => {
+    const expectedDir = absPath('./test/__fixtures__/make-migration/04/expected/migrations');
 
-//     const migration = await fs.promises.readFile(migrationsPath3 + '/0002_migration.sql', 'utf-8');
+    await makeMigration(schemasPath, migrationsDir4, 'add_name_field').catch(err => console.error(err));
 
-//     assert.equal(migration, expectedMigration);
-// })().finally(async () => {
-//     // cleanup
-//     await fs.promises.rm(migrationsPath3 + '/0002_migration.sql');
+    assertFoldersEqual(expectedDir, migrationsDir4);
+})().finally(async () => {
+    // cleanup
+    await fs.promises.rm(migrationsDir4 + '/0001_add_name_field.sql', { recursive: true, force: true });
 
-//     assert.equal(fs.existsSync(migrationsPath3 + '/0001_migration.sql'), true);
-//     assert.equal(fs.existsSync(migrationsPath3 + '/0002_migration.sql'), false);
-// });
-
-// // custom migration name
-// (async () => {
-//     await makeMigration(schemasPath, migrationsPath4, 'add_name_field').catch(err => console.error(err));
-
-//     assert.equal(fs.existsSync(migrationsPath4 + '/0001_add_name_field.sql'), true);
-// })().finally(async () => {
-//     // cleanup
-//     await fs.promises.rm(migrationsPath4, { recursive: true, force: true });
-
-//     assert.equal(fs.existsSync(migrationsPath4), false);
-// });
+    assert.equal(fs.existsSync(migrationsDir4 + '/0001_add_name_field.sql'), false);
+});

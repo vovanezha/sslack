@@ -20,8 +20,10 @@ async function buildSchemas(schemasPath) {
 }
 
 async function createVersion(migrationsPath) {
-    if (!(await fs.existsSync(migrationsPath))) {
-        await fs.promises.mkdir(migrationsPath);
+    const exists = fs.existsSync(migrationsPath)
+
+    if (!exists) {
+        await fs.promises.mkdir(migrationsPath, {recursive: true});
         return '0001';
     }
 
