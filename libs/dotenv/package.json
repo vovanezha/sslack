@@ -1,0 +1,12 @@
+{
+  "name": "dotenv",
+  "version": "1.0.0",
+  "description": "Tiny library for parsing .env file",
+  "main": "index.js",
+  "keywords": [
+    "dotenv",
+    ".env"
+  ],
+  "author": "vova19tup@gmail.com",
+  "license": "ISC"
+}
