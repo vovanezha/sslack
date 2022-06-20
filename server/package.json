@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "querybuilder": "link:../libs/querybuilder",
-    "schema": "link:../libs/schema"
+    "schema": "link:../libs/schema",
+    "box": "link:../libs/box"
   }
 }

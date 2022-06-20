@@ -1,3 +1,5 @@
+- maybe create a separate lib to work with routes
+
 - add authorization to the server:
   - endpoints
   - database models

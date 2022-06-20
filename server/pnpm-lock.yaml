@@ -1,11 +1,13 @@
-lockfileVersion: 5.4
+lockfileVersion: 5.3
 
 specifiers:
   alive-node: link:../libs/alive-node
+  box: link:../libs/box
   querybuilder: link:../libs/querybuilder
   schema: link:../libs/schema
 
 dependencies:
+  box: link:../libs/box
   querybuilder: link:../libs/querybuilder
   schema: link:../libs/schema
 
