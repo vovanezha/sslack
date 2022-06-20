@@ -39,7 +39,7 @@ async function createMigrationFilepath(migrationsPath, migrationName) {
     const version = await createVersion(migrationsPath);
     const filename = `${version}_${migrationName || 'migration'}.sql`;
 
-    return `${migrationsPath}/${filename}`;
+    return [`${migrationsPath}/${filename}`, filename];
 }
 
 module.exports = async function makeMigration(schemasPath, migrationsPath, migrationName) {
@@ -56,6 +56,9 @@ module.exports = async function makeMigration(schemasPath, migrationsPath, migra
         sql = diffSchemas(newSchemas, oldSchemas);
     }
 
-    const filepath = await createMigrationFilepath(migrationsPath, migrationName);
+    const [filepath, filename] = await createMigrationFilepath(migrationsPath, migrationName);
+
+    console.log(`Migration ${filename} file created`);
+
     return fs.promises.writeFile(filepath, sql);
 }

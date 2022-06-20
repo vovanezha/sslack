@@ -29,11 +29,15 @@ async function run() {
       host: env.DB_HOST,
     }
 
-    return migrate(schemasPath, migrationsPath, options);
+    migrate(schemasPath, migrationsPath, options);
+
+    return;
   }
 
   if (method === 'make-migration') {
-    return makeMigration(schemasPath, migrationsPath, migrationName);
+    makeMigration(schemasPath, migrationsPath, migrationName);
+
+    return;
   }
 }
 

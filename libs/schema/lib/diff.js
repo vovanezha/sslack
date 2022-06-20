@@ -102,8 +102,6 @@ module.exports = function diffSchemas(newSchemas, oldSchemas) {
 
         if (!isEqual(newSchema.fields, oldSchema.fields)) {
             schemas[newSchema.name] = { new: newSchema, old: oldSchema }
-
-            console.dir(newSchema, { depth: null })
         }
     }
 
